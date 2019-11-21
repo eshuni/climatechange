@@ -1,5 +1,5 @@
 
-CREATE TABLE Climate (
+CREATE TABLE Combined (
 	Region character varying(50) NOT NULL,
 	Date DATE NOT NULL,
 	PCP FLOAT NOT NULL,
@@ -11,3 +11,4 @@ CREATE TABLE Climate (
 	PRIMARY KEY (Region,Date)
 );
 
+SELECT * FROM COMBINED;

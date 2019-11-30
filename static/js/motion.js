@@ -84,10 +84,6 @@ d3.csv("../../Input/final.csv").then(function(data) {
     .append("div")
       .style("opacity", 0)
       .attr("class", "tooltip")
-      .style("background-color", "black")
-      .style("border-radius", "5px")
-      .style("padding", "10px")
-      .style("color", "white");
 
   // // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
   var showTooltip = function(d) {
@@ -151,7 +147,6 @@ d3.csv("../../Input/final.csv").then(function(data) {
     .on("mouseleave", hideTooltip );
 
 
-
     // ---------------------------//
     //       LEGEND              //
     // ---------------------------//
@@ -159,139 +154,167 @@ d3.csv("../../Input/final.csv").then(function(data) {
   
 
     // Add legend: circles
-    var valuesToShow = [5, 20, 50]
-    var xCircle = 390
-    var xLabel = 440
+  var valuesToShow = [5, 20, 50]
+  var xCircle = 380
+  var xLabel = 440
 
-    svg
-      .selectAll("legend")
-      .data(valuesToShow)
-      .enter()
-      .append("circle")
-        .attr("cx", xCircle)
-        .attr("cy", function(d){ return height - 1 - z(d) } )
-        .attr("r", function(d){ return z(d) })
-        .style("fill", "none")
-        .attr("stroke", "black")
+  svg
+    .selectAll("legend")
+    .data(valuesToShow)
+    .enter()
+    .append("circle")
+      .attr("cx", xCircle)
+      .attr("cy", function(d){ return height - 1 - z(d) } )
+      .attr("r", function(d){ return z(d) })
+      .style("fill", "none")
+      .attr("stroke", "black")
+      
+  // // Legend title
+  svg.append("text")
+    .attr('x', xCircle)
+    .attr("y", height - 100 +30)
+    .text("Palmer Drought Severity Index (PDSI)")
+    .attr("text-anchor", "middle")
 
-    // // Add legend: segments
-    // svg
-    //   .selectAll("legend")
-    //   .data(valuesToShow)
-    //   .enter()
-    //   .append("line")
-    //     .attr('x1', function(d){ return xCircle + z(d) } )
-    //     .attr('x2', xLabel)
-    //     .attr('y1', function(d){ return height - 1 - z(d) } )
-    //     .attr('y2', function(d){ return height - 1 - z(d) } )
-    //     .attr('stroke', 'black')
-    //     .style('stroke-dasharray', ('2,2'))
+  // // Add one dot in the legend for each name.
+  var size = 20
+  var allgroups = ["Northeast", "Southeast", "West"]
+  svg.selectAll("myrect")
+    .data(allgroups)
+    .enter()
+    .append("circle")
+      .attr("cx", 390)
+      .attr("cy", function(d,i){ return 1 + i*(size+5)}) 
+      .attr("r", 7)
+      .style("fill", function(d){ return myColor2(d)})
+      .on("mouseover", highlight)
+      .on("mouseleave", noHighlight)
 
-    // // Add legend: labels
-    // svg
-    //   .selectAll("legend")
-    //   .data(valuesToShow)
-    //   .enter()
-    //   .append("text")
-    //     .attr('x', xLabel)
-    //     .attr('y', function(d){ return height - 1 - z(d) } )
-    //     .text( function(d){ return d/1 } )
-    //     .style("font-size", 0.5)
-    //     .attr('alignment-baseline', 'right')
+  var bisect = d3.bisector(function(d) { return d[0]; });
 
-    // // Legend title
-    svg.append("text")
-      .attr('x', xCircle)
-      .attr("y", height - 100 +30)
-      .text("Palmer Drought Severity Index (PDSI)")
-      .attr("text-anchor", "middle")
+  // Add labels beside legend dots
+  dot = svg.selectAll("mylabels")
+    .data(allgroups)
+    .enter()
+    .append("text")
+      .attr("x", 390 + size*.8)
+      .attr("y", function(d,i){ return i * (size + 5) + (size/2)}) 
+      .style("fill", function(d){ return myColor2(d)})
+      .text(function(d){ return d})
+      .on("mouseover", highlight)
+      .on("mouseleave", noHighlight)
 
-    // // Add one dot in the legend for each name.
-    var size = 20
-    var allgroups = ["Northeast", "Southeast", "West"]
-    svg.selectAll("myrect")
-      .data(allgroups)
-      .enter()
-      .append("circle")
-        .attr("cx", 390)
-        .attr("cy", function(d,i){ return 1 + i*(size+5)}) 
-        .attr("r", 7)
-        .style("fill", function(d){ return myColor2(d)})
-        .on("mouseover", highlight)
-        .on("mouseleave", noHighlight)
+  var label = svg.append("text")
+    .attr("class", "year label")
+    .attr("text-anchor", "end")
+    .attr("y", height - 25)
+    .attr("x", width)
+    .text(2014);
 
-    // Add labels beside legend dots
-    svg.selectAll("mylabels")
-      .data(allgroups)
-      .enter()
-      .append("text")
-        .attr("x", 390 + size*.8)
-        .attr("y", function(d,i){ return i * (size + 5) + (size/2)}) 
-        .style("fill", function(d){ return myColor2(d)})
-        .text(function(d){ return d})
-        .attr("text-anchor", "left")
-        .style("alignment-baseline", "left")
-        .on("mouseover", highlight)
-        .on("mouseleave", noHighlight)
+    // var year = parseInt('2014-01');
+    // console.log(year)
 
-    var label = svg.append("text")
-      .attr("class", "year label")
-      .attr("text-anchor", "end")
-      .attr("y", height - 25)
-      .attr("x", width)
-      .text(2014);
+    // data.forEach(function(data1) {
+    //   data1.TAVG = +data1.TAVG;
+    //   data1.PCP = +data1.PCP;
+    // });
 
-    // // Add an overlay for the year label.
-    // var box = label.node().getBBox();
 
-    // var overlay = svg.append("rect")
-    //     .attr("class", "overlay")
-    //     .attr("x", box.x)
-    //     .attr("y", box.y)
-    //     .attr("width", box.width)
-    //     .attr("height", box.height)
-    //     .on("mouseover", enableInteraction);
 
-    //   // Start a transition that interpolates the data based on year.
-    //   svg.transition()
-    //       .duration(300000)
-    //       .ease("linear")
-    //       .tween("year", tweenYear)
-    //       .each("end", enableInteraction);
-    // // After the transition finishes, you can mouseover to change the year.
-    // function enableInteraction() {
-    //   var yearScale = d3.scale.linear()
-    //       .domain([2014, 2018])
-    //       .range([box.x + 10, box.x + box.width - 10])
-    //       .clamp(true);
+  // Add an overlay for the year label.
+  var box = label.node().getBBox();
 
-    //   // Cancel the current transition, if any.
-    //   svg.transition().duration(0);
+  var overlay = svg.append("rect")
+        .attr("class", "overlay")
+        .attr("x", box.x)
+        .attr("y", box.y)
+        .attr("width", box.width)
+        .attr("height", box.height)
+        .on("mouseover", enableInteraction);
 
-    //   overlay
-    //       .on("mouseover", mouseover)
-    //       .on("mouseout", mouseout)
-    //       .on("mousemove", mousemove)
-    //       .on("touchmove", mousemove);
+  // Start a transition that interpolates the data based on year.
+  overlay.transition()
+      .duration(30000)
+      // .ease("linear")
+      .tween("year", tweenYear)
+      .each("end", enableInteraction);
 
-    //   function mouseover() {
-    //     label.classed("active", true);
-    //   }
+  // Positions the dots based on data.
+  function position(dot) {
+    dot .attr("cx", function(d) { return z(x(d)); })
+        .attr("cy", function(d) { return z(y(d)); })
+        .attr("r", function(d) { return radiusScale(radius(d)); });
+  }
 
-    //   function mouseout() {
-    //     label.classed("active", false);
-    //   }
+  // Defines a sort order so that the smallest dots are drawn on top.
+  function order(a, b) {
+    return radius(b) - radius(a);
+  }
 
-    //   function mousemove() {
-    //     displayYear(yearScale.invert(d3.mouse(this)[0]));
-    //   }
-    // }
+  // After the transition finishes, you can mouseover to change the year.
+  function enableInteraction() {
+    var yearScale = d3.scale.linear()
+        .domain([2014-01, 2018-12])
+        .range([box.x + 10, box.x + box.width - 10])
+        .clamp(true);
 
-    // // Tweens the entire chart by first tweening the year, and then the data.
-    // // For the interpolated data, the dots and label are redrawn.
-    // function tweenYear() {
-    //   var year = d3.interpolateNumber(2014, 2018);
-    //   return function(t) { displayYear(year(t)); };
-    // }
-  })
+    // Cancel the current transition, if any.
+    overlay.transition().duration(1000);
 
+    overlay
+        .on("mouseover", mouseover)
+        .on("mouseout", mouseout)
+        .on("mousemove", mousemove)
+        .on("touchmove", mousemove);
+
+    function mouseover() {
+      label.classed("active", true);
+    }
+
+    function mouseout() {
+      label.classed("active", false);
+    }
+
+    function mousemove() {
+      displayYear(yearScale.invert(d3.mouse(this)[0]));
+    }
+  }
+
+  // Tweens the entire chart by first tweening the year, and then the data.
+  // For the interpolated data, the dots and label are redrawn.
+  function tweenYear() {
+    var year = d3.interpolateNumber(2014-01, 2018-12);
+    return function(t) { displayYear(year(t)); };
+  }
+
+  // Updates the display to show the specified year.
+  function displayYear(year) {
+    dot.data(interpolateData(year), key).call(position).sort(order);
+    label.text(Math.round(year));
+  }
+
+  // Interpolates the dataset for the given (fractional) year.
+  function interpolateData(year) {
+    return data.map(function(d) {
+      return {
+        name: d.Region,
+        temp: interpolateValues(d.TAVG, year),
+        drougt: interpolateValues(d.PDSI_POS, year),
+        percipitation: interpolateValues(d.PCP, year)
+      };
+    });
+  }
+
+
+  // Finds (and possibly interpolates) the value for the specified year.
+  function interpolateValues(values, year) {
+    var i = bisect.left(values, year, 0, values.length - 1),
+        a = values[i];
+    if (i > 0) {
+      var b = values[i - 1],
+          t = (year - a[0]) / (b[0] - a[0]);
+      return a[1] * (1 - t) + b[1] * t;
+    }
+    return a[1];
+  }
+});

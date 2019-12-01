@@ -30,8 +30,8 @@ L.control
 .layers(baseMaps)
 .addTo(myMap);
 // grabbing data 
-var statesData = "states.json";
-var climateData = "climate.json";
+var statesData = "../static/data/states.json";
+var climateData = "../static/data/climate.json";
 
 westArray = ["California", "Nevada"];
 southEastArray = ["Virginia", "North Carolina", "South Carolina", "Georgia", "Alabama", "Florida"];

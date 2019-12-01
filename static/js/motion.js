@@ -1,7 +1,7 @@
 // set the dimensions and margins of the graph
 var margin = {top: 40, right: 150, bottom: 60, left: 40},
     width = 900 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    height = 550 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
@@ -13,7 +13,7 @@ var svg = d3.select("#my_dataviz")
           "translate(" + margin.left + "," + margin.top + ")");
 
 //Read the data
-d3.csv("../../Input/final.csv").then(function(data) {
+d3.csv("../static/data/final.csv").then(function(data) {
   // ---------------------------//
   //       AXIS  AND SCALE      //
   // ---------------------------//
@@ -193,7 +193,7 @@ d3.csv("../../Input/final.csv").then(function(data) {
   var bisect = d3.bisector(function(d) { return d[0]; });
 
   // Add labels beside legend dots
-  dot = svg.selectAll("mylabels")
+  var dot = svg.selectAll("mylabels")
     .data(allgroups)
     .enter()
     .append("text")
@@ -221,100 +221,104 @@ d3.csv("../../Input/final.csv").then(function(data) {
 
 
 
-  // Add an overlay for the year label.
-  var box = label.node().getBBox();
+  // // Add an overlay for the year label.
+  // var box = label.node().getBBox();
 
-  var overlay = svg.append("rect")
-        .attr("class", "overlay")
-        .attr("x", box.x)
-        .attr("y", box.y)
-        .attr("width", box.width)
-        .attr("height", box.height)
-        .on("mouseover", enableInteraction);
+  // var overlay = svg.append("rect")
+  //       .attr("class", "overlay")
+  //       .attr("x", box.x)
+  //       .attr("y", box.y)
+  //       .attr("width", box.width)
+  //       .attr("height", box.height)
+  //       .on("mouseover", enableInteraction);
 
-  // Start a transition that interpolates the data based on year.
-  overlay.transition()
-      .duration(30000)
-      // .ease("linear")
-      .tween("year", tweenYear)
-      .each("end", enableInteraction);
+  // // Start a transition that interpolates the data based on year.
+  // overlay.transition()
+  //     .duration(30000)
+  //     // .ease("linear")
+  //     .tween("year", tweenYear)
+  //     .each("end", enableInteraction);
 
-  // Positions the dots based on data.
-  function position(dot) {
-    dot .attr("cx", function(d) { return z(x(d)); })
-        .attr("cy", function(d) { return z(y(d)); })
-        .attr("r", function(d) { return radiusScale(radius(d)); });
-  }
+  // // Positions the dots based on data.
+  // function radius(d) { return d.PDSI_POS; }
 
-  // Defines a sort order so that the smallest dots are drawn on top.
-  function order(a, b) {
-    return radius(b) - radius(a);
-  }
+  // function position(dot) {
+  //   dot .attr("cx", function(d) { return z(x(d)); })
+  //       .attr("cy", function(d) { return z(y(d)); })
+  //       .attr("r", function(d) { return z(radius(d)); });
+  // }
 
-  // After the transition finishes, you can mouseover to change the year.
-  function enableInteraction() {
-    var yearScale = d3.scale.linear()
-        .domain([2014-01, 2018-12])
-        .range([box.x + 10, box.x + box.width - 10])
-        .clamp(true);
+  // // Defines a sort order so that the smallest dots are drawn on top.
+  // function order(a, b) {
+  //   return radius(b) - radius(a);
+  // }
 
-    // Cancel the current transition, if any.
-    overlay.transition().duration(1000);
+  // // After the transition finishes, you can mouseover to change the year.
+  // function enableInteraction() {
+  //   var yearScale = d3.scale.linear()
+  //       .domain([2014, 2018])
+  //       .range([box.x + 10, box.x + box.width - 10])
+  //       .clamp(true);
 
-    overlay
-        .on("mouseover", mouseover)
-        .on("mouseout", mouseout)
-        .on("mousemove", mousemove)
-        .on("touchmove", mousemove);
+  //   // Cancel the current transition, if any.
+  //   overlay.transition().duration(1000);
 
-    function mouseover() {
-      label.classed("active", true);
-    }
+  //   overlay
+  //       .on("mouseover", mouseover)
+  //       .on("mouseout", mouseout)
+  //       .on("mousemove", mousemove)
+  //       .on("touchmove", mousemove);
 
-    function mouseout() {
-      label.classed("active", false);
-    }
+  //   function mouseover() {
+  //     label.classed("active", true);
+  //   }
 
-    function mousemove() {
-      displayYear(yearScale.invert(d3.mouse(this)[0]));
-    }
-  }
+  //   function mouseout() {
+  //     label.classed("active", false);
+  //   }
 
-  // Tweens the entire chart by first tweening the year, and then the data.
-  // For the interpolated data, the dots and label are redrawn.
-  function tweenYear() {
-    var year = d3.interpolateNumber(2014-01, 2018-12);
-    return function(t) { displayYear(year(t)); };
-  }
+  //   function mousemove() {
+  //     displayYear(yearScale.invert(d3.mouse(this)[0]));
+  //   }
+  // }
 
-  // Updates the display to show the specified year.
-  function displayYear(year) {
-    dot.data(interpolateData(year), key).call(position).sort(order);
-    label.text(Math.round(year));
-  }
+  // // Tweens the entire chart by first tweening the year, and then the data.
+  // // For the interpolated data, the dots and label are redrawn.
+  // function tweenYear() {
+  //   var year = d3.interpolateNumber(2014, 2018);
+  //   return function(t) { displayYear(year(t)); };
+  // }
 
-  // Interpolates the dataset for the given (fractional) year.
-  function interpolateData(year) {
-    return data.map(function(d) {
-      return {
-        name: d.Region,
-        temp: interpolateValues(d.TAVG, year),
-        drougt: interpolateValues(d.PDSI_POS, year),
-        percipitation: interpolateValues(d.PCP, year)
-      };
-    });
-  }
+  // // Updates the display to show the specified year.
+  // function key(d) { return d.Region; }
+
+  // function displayYear(year) {
+  //   dot.data(interpolateData(year), key).call(position).sort(order)
+  //   label.text(Math.round(year));
+  // }
+
+  // // Interpolates the dataset for the given (fractional) year.
+  // function interpolateData(year) {
+  //   return data.map(function(d) {
+  //     return {
+  //       name: d.Region,
+  //       temp: interpolateValues(d.TAVG, year),
+  //       drougt: interpolateValues(d.PDSI_POS, year),
+  //       percipitation: interpolateValues(d.PCP, year)
+  //     };
+  //   });
+  // }
 
 
-  // Finds (and possibly interpolates) the value for the specified year.
-  function interpolateValues(values, year) {
-    var i = bisect.left(values, year, 0, values.length - 1),
-        a = values[i];
-    if (i > 0) {
-      var b = values[i - 1],
-          t = (year - a[0]) / (b[0] - a[0]);
-      return a[1] * (1 - t) + b[1] * t;
-    }
-    return a[1];
-  }
+  // // Finds (and possibly interpolates) the value for the specified year.
+  // function interpolateValues(values, year) {
+  //   var i = year - 1,
+  //       a = values[i];
+  //   if (i > 0) {
+  //     var b = values[i - 1],
+  //         t = (year - a[0]) / (b[0] - a[0]);
+  //     return a[1] * (1 - t) + b[1] * t;
+  //   }
+  //   return a[1];
+  // }
 });

@@ -1,0 +1,196 @@
+// D3 Scatter Plot
+// Chart Setup
+let width = parseInt(d3.select("#scatter").style("width"));
+let height = width - width / 3.9;
+let margin = 20;
+let labelArea = 50;
+
+// padding for the text 
+let tPaddingBottom = 40;
+let tPaddingLeft = 40;
+
+// Create an SVG wrapper
+let svg = d3
+  .select("#scatter")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .attr("class", "chart");
+
+let svgLegend = d3
+  .select("#scatter-legend")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  
+// Handmade legend
+svgLegend.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#69b3a2")
+svgLegend.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#404080")
+svgLegend.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#404080")
+svgLegend.append("text").attr("x", 220).attr("y", 130).text("Northeast").style("font-size", "15px").attr("alignment-baseline","middle")
+svgLegend.append("text").attr("x", 220).attr("y", 130).text("Southeast").style("font-size", "15px").attr("alignment-baseline","middle")
+svgLegend.append("text").attr("x", 220).attr("y", 130).text("West").style("font-size", "15px").attr("alignment-baseline","middle")
+
+// Set the radius for each dot that will appear in the graph.
+let circRadius = 10.0;
+
+// Axes Labels:
+// Bottom Axis -- We create a group element to nest our bottom axes labels.
+svg.append("g").attr("class", "xText");
+let xText = d3.select(".xText");
+
+function xTextRefresh() {
+  xText.attr(
+    "transform",
+    "translate(" +
+      ((width - labelArea) / 2 + labelArea) +
+      ", " +
+      (height) +
+      ")"
+  );
+}
+xTextRefresh();
+
+// 1. Year
+xText
+  .append("text")
+  .attr("y", -26)
+  .attr("data-name", "Year")
+  .attr("data-axis", "x")
+  .attr("class", "aText active x")
+  .text("Year");
+
+// Left Axis --
+let leftTextX = margin + tPaddingLeft;
+let leftTextY = (height + labelArea) / 2 - labelArea;
+
+// We add a second label group, this time for the axis left of the chart.
+svg.append("g").attr("class", "yText");
+
+// yText will allows us to select the group without excess code.
+let yText = d3.select(".yText");
+
+// Like before, we nest the group's transform attr in a function to make changing it on window change an easy operation.
+function yTextRefresh() {
+  yText.attr(
+    "transform",
+    "translate(" + leftTextX + ", " + leftTextY + ")rotate(-90)"
+  );
+}
+yTextRefresh();
+
+// 1. "Average Temperature"
+yText
+  .append("text")
+  .attr("y", -26)
+  .attr("data-name", "average temperature")
+  .attr("data-axis", "y")
+  .attr("class", "aText active y")
+  .text("Average Temperature");
+
+// Import .csv file.
+d3.csv("assets/data/final.csv").then(function(data) {
+  // Visualize the data
+visualize(data);
+  // console.log(data);
+});
+
+// Create visualization function
+function visualize(theData) {
+
+  let curY = "TAVG";
+
+  // We also save empty variables for our the min and max values of x and y.
+  let yMin;
+  let yMax;
+
+
+  // change the min and max for y
+  function yMinMax() {
+    // min will grab the smallest datum from the selected column.
+    yMin = d3.min(theData, function(d) {
+      return parseFloat(d[curY]) * 0.90;
+    });
+
+    // .max will grab the largest datum from the selected column.
+    yMax = d3.max(theData, function(d) {
+      return parseFloat(d[curY]) * 1.10;
+    });
+  }
+  yMinMax();
+
+  // parse the date / time
+  var parseTime = d3.timeParse("%Y-%m");
+
+  // format the data
+  theData.forEach(function(d) {
+    d.Date = parseTime(d.Date);
+    d.close = +d.close;
+  });
+
+  // With the min and max values now defined, we can create our scales.
+  // set the ranges
+  let xScale = d3.scaleTime()
+    .domain(d3.extent(theData, d => d.Date))
+    .range([(margin + labelArea), width * .95]);
+    
+  let yScale = d3
+    .scaleLinear()
+    .domain([yMin, yMax])
+    .range([height - margin - labelArea, margin]);
+
+  // We pass the scales into the axis methods to create the axes.
+  let xAxis = d3.axisBottom(xScale);
+  let yAxis = d3.axisLeft(yScale);
+
+  // Determine x, y and r tick counts.
+  // Note: Saved as a function for easy mobile updates.
+  function tickCount() {
+    if (width <= 500) {
+      xAxis.ticks(5);
+      yAxis.ticks(5);
+      // rAxis.ticks(5);
+    }
+    else {
+      xAxis.ticks(10);
+      yAxis.ticks(10);
+      // rAxis.ticks(10);
+    }
+  }
+  tickCount();
+
+  // We append the axes in group elements;
+  svg
+    .append("g")
+    .call(xAxis)
+    .attr("class", "xAxis")
+    .attr("transform", "translate(0," + (height - margin - labelArea) + ")");
+  svg
+    .append("g")
+    .call(yAxis)
+    .attr("class", "yAxis")
+    .attr("transform", "translate(" + (margin + labelArea) + ", 0)");
+  
+  // Make a grouping for our dots and their labels.
+  let theCircles = svg.selectAll("g theCircles").data(theData).enter();
+
+  // Append the circles for each row of data (or each region, in this case).
+  theCircles
+    .append("circle")
+    // These attr's specify location, size and class.
+    .attr("cx", d => xScale(d.Date))
+    .attr("cy", d => yScale(d.TAVG))
+    .attr("r", circRadius)
+    .attr("class", function(d) {
+      return d.Abbrev; 
+    }); 
+
+    // legend = svg.append("g")
+    // .attr("class","legend")
+    // .attr("transform","translate(50,30)")
+    // .style("font-size","12px")
+    // .call(d3.legend)  
+
+
+
+  }

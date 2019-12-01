@@ -1,4 +1,4 @@
-// D3 Animated Scatter Plot
+// D3 Scatter Plot
 // Chart Setup
 let width = parseInt(d3.select("#scatter").style("width"));
 let height = width - width / 3.9;
@@ -8,7 +8,6 @@ let labelArea = 50;
 // padding for the text 
 let tPaddingBottom = 40;
 let tPaddingLeft = 40;
-// let tPaddingRight = 40;
 
 // Create an SVG wrapper
 let svg = d3
@@ -18,8 +17,22 @@ let svg = d3
   .attr("height", height)
   .attr("class", "chart");
 
+let svgLegend = d3
+  .select("#scatter-legend")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  
+// Handmade legend
+svgLegend.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#69b3a2")
+svgLegend.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#404080")
+svgLegend.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#404080")
+svgLegend.append("text").attr("x", 220).attr("y", 130).text("Northeast").style("font-size", "15px").attr("alignment-baseline","middle")
+svgLegend.append("text").attr("x", 220).attr("y", 130).text("Southeast").style("font-size", "15px").attr("alignment-baseline","middle")
+svgLegend.append("text").attr("x", 220).attr("y", 130).text("West").style("font-size", "15px").attr("alignment-baseline","middle")
+
 // Set the radius for each dot that will appear in the graph.
-let circRadius = 6.0;
+let circRadius = 10.0;
 
 // Axes Labels:
 // Bottom Axis -- We create a group element to nest our bottom axes labels.

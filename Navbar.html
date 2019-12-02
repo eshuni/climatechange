@@ -13,44 +13,61 @@
 
     <!-- Our own CSS stylesheet -->
     <link rel="stylesheet" href="static/css/web.css" media="screen">
+    <style>
+      .debug {
+        border-style: dashed;
+        border-color: red;
+        border-width: 1px;
+      }
 
+      .content {
+        margin: 20px;
+        background-color: white;
+      }
+
+      .content h1,h2,h3,h4,h5,h6 {
+        color: turquoise;
+      }
+
+      #titlebrand {
+        background-color: turquoise;
+        color: white;
+        padding: 10px 15px 10px 15px;
+      }
+
+      .navbar {
+        padding: 0px 25px 0px 25px;
+      }
+
+      body {
+        background-color: #f5f5f5;
+      }
+    </style>
   </head>
 
   <body>
     <!-- Start of navbar -->
-    <nav class="navbar navbar-default">
-      <div class="container-fluid navbar-custom">
-
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="row">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-              <span class="sr-only">Toggle Navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <div class="col-xs-9 phone-nav">
-              <a class="navbar-brand" href="#" id="logo">Weather Change</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+      <a id="titlebrand" class="navbar-brand" href="#">Weather</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Vizualizations
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="templates/motion.html">Bubble Chart</a>
+              <a class="dropdown-item" href="templates/choropleth.html">Choropleth Map</a>
+              <a class="dropdown-item" href="templates/weathertrends.html">Scatter Plot</a>
+              <a class="dropdown-item" href="templates/chartbar.html">Bar Chart</a>
             </div>
-          </div>
-
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right navbar-right-custom">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vizualization <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                 <li><a href="templates/motion.html">Bubble Chart</a></li>
-                  <li><a href="templates/choropleth.html">Choropleth Map</a></li>
-                  <li><a href="templates/weathertrends.html">Scatter Plot</a></li>
-                  <li><a href="templates/chartbar.html">Bar Chart</a></li>
-                </ul>
-              </li>
-            </ul>
-          </div><!-- /.navbar-collapse -->
-        </div>
-      </div><!-- /.container-fluid -->
+          </li>
+        </ul>
+      </div>
     </nav>
     <!-- End of navbar -->
 
@@ -62,8 +79,9 @@
             <h1 class="description-header">Summary</h1>
             <hr class="description-hr"/>
             <img src="../INPUT/scatter.png" alt="" id="description-image"/>
-            <p>The purpose of this project was to analyze how weather changes as you get closer to the equator. To accomplish this analysis, we first pulled data from the OpenWeatherMap API to assemble a dataset on over 500 cities.</p>
-            <p>After assembling the dataset, we used Matplotlib to plot various aspects of the weather vs. latitude. Factors we looked at included: temperature, cloudiness, wind speed, and humidity. This site provides the source data and visualizations created as part of the analysis, as well as explanations and descriptions of any trends and correlations witnessed.</p>
+            <p>This collection of tools builds on monthly values of temperature, precipitation, and several drought indices for each of the 344 climate divisions in the contiguous United States.</p>
+            <p>Temperature, Precipitation, and Drought Time Series: View how a certain parameter in a certain place has changed since 1895.</p>
+            <p>With recent increased discussion about Climate Change, we decided to look into one indication of Climate Change the Weather. We wanted to see this through Temperature change from 2014 to 2018.</p>
           </article>
         </div>
         <div class="col-md-5">

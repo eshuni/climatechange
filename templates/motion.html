@@ -6,22 +6,22 @@
   </head>
   <body>
     <div id="my_dataviz"></div>
-
+​
     <!-- Load d3.js -->
     <script src="https://d3js.org/d3.v2.js?2.8.1"></script>
     <script src="https://d3js.org/d3.v4.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-
+​
     <!-- Load color scale -->
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-
+​
     <!-- Load our .js script -->
     <script src="../static/js/motion.js"></script>
     
-
+​
   </body>
 </html>
-
+​
 <!-- A bit of CSS: change stroke color of circle on hover (white -> black) -->
 <style>
 .bubbles {
@@ -32,4 +32,72 @@
 .bubbles:hover {
   stroke: rgb(238, 65, 180);
 }
+​
+#chart {
+  margin-left: 0px;
+  height: 506px;
+}
+​
+text {
+  font: 10px sans-serif;
+}
+​
+.dot {
+  stroke: #000;
+}
+​
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+​
+.label {
+  fill: #777;
+}
+​
+.country {
+  font: 400 48px"Helvetica Neue";
+  text-anchor: center;
+  fill: #777;
+}
+​
+.year.label {
+  font: 400 120px"Helvetica Neue";
+  fill: #ddd;
+}
+​
+.year.label.active {
+  fill: #aaa;
+}
+​
+.hidden {
+  color: #f00;
+}
+​
+.visible {
+  color: #0f0;
+}
+​
+.overlay {
+  fill: none;
+  pointer-events: all;
+  cursor: ns-resize;
+}
+​
+.d3-tip {
+  line-height: 1;
+  font-family: Lucida Grande, Lucida Sans Unicode, Arial, Helvetica;
+  font-size: 12px;
+  padding: 12px;
+  background: #EFEFEF;
+  color: #253756;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #000000;
+}
 </style> 
+
+
+

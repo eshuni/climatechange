@@ -11,7 +11,7 @@ print(engine.table_names())
 
 #convert csv to data frame 
 # combined_df = pd.read_csv("/../../Input/final.csv")
-combined_df = pd.read_csv("../../Input/final.csv")
+combined_df = pd.read_csv("../static/data/final.csv")
 
 combined_df.to_sql(name='combined', con=engine, if_exists='append', index=False)
 

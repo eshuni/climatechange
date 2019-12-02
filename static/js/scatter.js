@@ -24,15 +24,16 @@ let svgLegend = d3
   .attr("height", height)
   
 // Handmade legend
-svgLegend.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#69b3a2")
-svgLegend.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#404080")
-svgLegend.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#404080")
-svgLegend.append("text").attr("x", 220).attr("y", 130).text("Northeast").style("font-size", "15px").attr("alignment-baseline","middle")
-svgLegend.append("text").attr("x", 220).attr("y", 130).text("Southeast").style("font-size", "15px").attr("alignment-baseline","middle")
-svgLegend.append("text").attr("x", 220).attr("y", 130).text("West").style("font-size", "15px").attr("alignment-baseline","middle")
+svgLegend.append("circle").attr("cx",200).attr("cy",130).attr("r", 8.0).style("fill", "#173996")
+svgLegend.append("circle").attr("cx",200).attr("cy",160).attr("r", 8.0).style("fill", "#ff0000")
+svgLegend.append("circle").attr("cx",200).attr("cy",190).attr("r", 8.0).style("fill", "#00ff00")
+
+svgLegend.append("text").attr("x", 220).attr("y", 130).text("Northeast").style("font-size", "18px").attr("alignment-baseline","middle")
+svgLegend.append("text").attr("x", 220).attr("y", 160).text("Southeast").style("font-size", "18px").attr("alignment-baseline","middle")
+svgLegend.append("text").attr("x", 220).attr("y", 190).text("West").style("font-size", "18px").attr("alignment-baseline","middle")
 
 // Set the radius for each dot that will appear in the graph.
-let circRadius = 10.0;
+let circRadius = 8.0;
 
 // Axes Labels:
 // Bottom Axis -- We create a group element to nest our bottom axes labels.
@@ -58,7 +59,7 @@ xText
   .attr("data-name", "Year")
   .attr("data-axis", "x")
   .attr("class", "aText active x")
-  .text("Year");
+  .text("YEAR");
 
 // Left Axis --
 let leftTextX = margin + tPaddingLeft;
@@ -86,10 +87,10 @@ yText
   .attr("data-name", "average temperature")
   .attr("data-axis", "y")
   .attr("class", "aText active y")
-  .text("Average Temperature");
+  .text("AVERAGE TEMPERATURES");
 
 // Import .csv file.
-d3.csv("../static/data/final.csv").then(function(data) {
+d3.csv("static/data/final.csv").then(function(data) {
   // Visualize the data
 visualize(data);
   // console.log(data);
@@ -184,13 +185,4 @@ function visualize(theData) {
     .attr("class", function(d) {
       return d.Abbrev; 
     }); 
-
-    // legend = svg.append("g")
-    // .attr("class","legend")
-    // .attr("transform","translate(50,30)")
-    // .style("font-size","12px")
-    // .call(d3.legend)  
-
-
-
   }

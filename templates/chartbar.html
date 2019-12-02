@@ -19,7 +19,8 @@ type: 'bar',
 data: {
     labels: ["West", "southEast", "northEast"],
     datasets: [{
-        label: 'US Regional Average Temperature of December 2018',
+
+        label: 'US Average Temperature Per Region 2018-12',
         data: [39.5, 49.7, 29.3],
         backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
@@ -33,7 +34,7 @@ data: {
             'rgba(255, 206, 86, 1)'
             
         ],
-        borderWidth: 4
+        borderWidth: 1.5
     }]
 },
 options: {
@@ -42,8 +43,11 @@ options: {
             ticks: {
                 beginAtZero:true
             }
-        }]
-    }
+        }],
+        xAxes: [{
+            barThickness : 99
+        }]   
+    }   
 }
 })
     </script>

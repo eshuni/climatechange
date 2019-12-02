@@ -46,7 +46,7 @@ d3.csv("../static/data/final.csv").then(function(data) {
       .attr("text-anchor", "middle")
       .attr("x", 0)
       .attr("y", -20 )
-      .text("Percipitation Index per Region")
+      .text("Percipitation per Region")
       .attr("text-anchor", "start");
 
   // Add a scale for bubble size
@@ -88,11 +88,9 @@ d3.csv("../static/data/final.csv").then(function(data) {
   //     .attr("r", d => z(d.PDSI_POS))
   //     .style("fill", d => myColor2(d.Region));
 
-
     // ---------------------------//
     //       LEGEND              //
     // ---------------------------//
-
   
 
     // Add legend: circles
@@ -146,13 +144,12 @@ d3.csv("../static/data/final.csv").then(function(data) {
     .attr("x", width)
     .text(2014);
 
-
 // Load the data.
 drawMotionChart(data);
 
 function drawMotionChart() {
 
-  // Add a dot per nation. Initialize the data at 1990, and set the colors.
+  // Add a dot per nation. Initialize the data at 2014, and set the colors.
   var tooltip = d3.select("body")
     .append("div")
     .style("position", "absolute")
@@ -175,7 +172,7 @@ function drawMotionChart() {
 
   // Start a transition that interpolates the data based on year.
   svg.transition()
-    .duration(5000)
+    .duration(10000)
     // .ease("linear")
     .tween("year", tweenYear)
     .each("end", enableInteraction);
@@ -187,6 +184,7 @@ function drawMotionChart() {
       .range([box.x + 10, box.x + box.width - 10])
       .clamp(true);
 
+      
     overlay.on("mouseover", mouseover)
       .on("mouseout", mouseout)
       .on("mousemove", mousemove)
@@ -232,12 +230,12 @@ function drawMotionChart() {
       .attr("r", d => z(d.PDSI_POS))
       .style("fill", d => myColor2(d.Region))
       .on("mouseover", function(d) {
-        tooltip.html("<strong>TAVG:</strong> " + d.TAVG + "<br><strong>Precipitation Index:</strong>"+ d.PCP);
+        tooltip.html("<strong>Average Temperature:</strong> " + d.TAVG + "<br><strong>Percipitation Index:</strong>"+ d.PCP);
         tooltip.attr('class', 'd3-tip');
         return tooltip.style("visibility", "visible");
       })
       .on("mousemove", function(d) {
-        tooltip.html("<strong>TAVG:</strong> " + d.TAVG + "<br><strong>Precipitation Index:</strong>"+ d.PCP);
+        tooltip.html("<strong>Average Temperature:</strong> " + d.TAVG + "<br><strong>Percipitation Index:</strong>"+ d.PCP);
         return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
       })
       .on("mouseout", function(d) {
@@ -265,3 +263,6 @@ function drawMotionChart() {
   }
 }
 });
+
+
+

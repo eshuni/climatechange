@@ -46,7 +46,7 @@ d3.csv("../static/data/final.csv").then(function(data) {
       .attr("text-anchor", "middle")
       .attr("x", 0)
       .attr("y", -20 )
-      .text("Percipitation per Region")
+      .text("Percipitation Index per Region")
       .attr("text-anchor", "start");
 
   // Add a scale for bubble size
@@ -59,71 +59,16 @@ d3.csv("../static/data/final.csv").then(function(data) {
     switch (region) {
       case "Northeast":
         return "red";
-        break;
       
       case "Southeast":
         return "green";
-        break;
 
       case "West":
         return "blue";
-        break;
       
       default:
         return "yellow";
     }
-  }
-
-
-  // ---------------------------//
-  //      TOOLTIP               //
-  // ---------------------------//
-
-  // // -1- Create a tooltip div that is hidden by default:
-  var tooltip = d3.select("#my_dataviz")
-    .append("div")
-      .style("opacity", 0)
-      .attr("class", "tooltip")
-
-  // // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
-  var showTooltip = function(d) {
-    tooltip
-      .transition()
-      .duration(200)
-    tooltip
-      .style("opacity", 1)
-      .html("Region: " + d.Region)
-      .style("left", (d3.mouse(this)[0]+30) + "px")
-      .style("top", (d3.mouse(this)[1]+30) + "px")
-  };
-  var moveTooltip = function(d) {
-    tooltip
-      .style("left", (d3.mouse(this)[0]+30) + "px")
-      .style("top", (d3.mouse(this)[1]+30) + "px")
-  };
-  var hideTooltip = function(d) {
-    tooltip
-      .transition()
-      .duration(200)
-      .style("opacity", 0)
-  };
-
-
-  // ---------------------------//
-  //       HIGHLIGHT GROUP      //
-  // ---------------------------//
-
-  // What to do when one group is hovered
-  var highlight = function(d){
-    // reduce opacity of all groups
-    d3.selectAll(".bubbles").style("opacity", .05)
-    // expect the one that is hovered
-    d3.selectAll("."+d).style("opacity", 1)
-  }
-
-  // // And when it is not hovered anymore
-  var noHighlight = function(d){
-    d3.selectAll(".bubbles").style("opacity", 1)
   }
 
   // ---------------------------//
@@ -131,20 +76,17 @@ d3.csv("../static/data/final.csv").then(function(data) {
   // ---------------------------//
 
   // Add dots
-  svg.append('g')
-    .selectAll("dot")
-    .data(data)
-    .enter()
-    .append("circle")
-      .attr("class", function(d) { return "bubbles " + d.Region })
-      .attr("cx", function (d) { return x(d.TAVG); } )
-      .attr("cx", d => x(d.TAVG))
-      .attr("cy", d => y(d.PCP))
-      .attr("r", d => z(d.PDSI_POS))
-      .style("fill", d => myColor2(d.Region))
-    .on("mouseover", showTooltip )
-    .on("mousemove", moveTooltip )
-    .on("mouseleave", hideTooltip );
+  // svg.append('g')
+  //   .selectAll("dot")
+  //   .data(data)
+  //   .enter()
+  //   .append("circle")
+  //     .attr("class", function(d) { return "bubbles " + d.Region })
+  //     .attr("cx", function (d) { return x(d.TAVG); } )
+  //     .attr("cx", d => x(d.TAVG))
+  //     .attr("cy", d => y(d.PCP))
+  //     .attr("r", d => z(d.PDSI_POS))
+  //     .style("fill", d => myColor2(d.Region));
 
 
     // ---------------------------//
@@ -156,7 +98,6 @@ d3.csv("../static/data/final.csv").then(function(data) {
     // Add legend: circles
   var valuesToShow = [5, 20, 50]
   var xCircle = 380
-  var xLabel = 440
 
   svg
     .selectAll("legend")
@@ -173,7 +114,7 @@ d3.csv("../static/data/final.csv").then(function(data) {
   svg.append("text")
     .attr('x', xCircle)
     .attr("y", height - 100 +30)
-    .text("Palmer Drought Severity Index (PDSI)")
+    .text("PDSI")
     .attr("text-anchor", "middle")
 
   // // Add one dot in the legend for each name.
@@ -186,11 +127,7 @@ d3.csv("../static/data/final.csv").then(function(data) {
       .attr("cx", 390)
       .attr("cy", function(d,i){ return 1 + i*(size+5)}) 
       .attr("r", 7)
-      .style("fill", function(d){ return myColor2(d)})
-      .on("mouseover", highlight)
-      .on("mouseleave", noHighlight)
-
-  var bisect = d3.bisector(function(d) { return d[0]; });
+      .style("fill", function(d){ return myColor2(d)});
 
   // Add labels beside legend dots
   var dot = svg.selectAll("mylabels")
@@ -200,9 +137,7 @@ d3.csv("../static/data/final.csv").then(function(data) {
       .attr("x", 390 + size*.8)
       .attr("y", function(d,i){ return i * (size + 5) + (size/2)}) 
       .style("fill", function(d){ return myColor2(d)})
-      .text(function(d){ return d})
-      .on("mouseover", highlight)
-      .on("mouseleave", noHighlight)
+      .text(function(d){ return d});
 
   var label = svg.append("text")
     .attr("class", "year label")
@@ -211,114 +146,122 @@ d3.csv("../static/data/final.csv").then(function(data) {
     .attr("x", width)
     .text(2014);
 
-    // var year = parseInt('2014-01');
-    // console.log(year)
 
-    // data.forEach(function(data1) {
-    //   data1.TAVG = +data1.TAVG;
-    //   data1.PCP = +data1.PCP;
-    // });
+// Load the data.
+drawMotionChart(data);
 
+function drawMotionChart() {
 
+  // Add a dot per nation. Initialize the data at 1990, and set the colors.
+  var tooltip = d3.select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .text("a simple tooltip");
 
-  // // Add an overlay for the year label.
-  // var box = label.node().getBBox();
+  tooltip.text("my tooltip text");
 
-  // var overlay = svg.append("rect")
-  //       .attr("class", "overlay")
-  //       .attr("x", box.x)
-  //       .attr("y", box.y)
-  //       .attr("width", box.width)
-  //       .attr("height", box.height)
-  //       .on("mouseover", enableInteraction);
+  // Add an overlay for the year label.
+  var box = label.node().getBBox();
 
-  // // Start a transition that interpolates the data based on year.
-  // overlay.transition()
-  //     .duration(30000)
-  //     // .ease("linear")
-  //     .tween("year", tweenYear)
-  //     .each("end", enableInteraction);
+  var overlay = svg.append("rect")
+    .attr("class", "overlay")
+    .attr("x", box.x)
+    .attr("y", box.y)
+    .attr("width", box.width)
+    .attr("height", box.height)
+    .on("mouseover", enableInteraction);
 
-  // // Positions the dots based on data.
-  // function radius(d) { return d.PDSI_POS; }
+  // Start a transition that interpolates the data based on year.
+  svg.transition()
+    .duration(5000)
+    // .ease("linear")
+    .tween("year", tweenYear)
+    .each("end", enableInteraction);
 
-  // function position(dot) {
-  //   dot .attr("cx", function(d) { return z(x(d)); })
-  //       .attr("cy", function(d) { return z(y(d)); })
-  //       .attr("r", function(d) { return z(radius(d)); });
-  // }
+  // After the transition finishes, you can mouseover to change the year.
+  function enableInteraction() {
+    var yearScale = d3.scale.linear()
+      .domain([2014, 2018])
+      .range([box.x + 10, box.x + box.width - 10])
+      .clamp(true);
 
-  // // Defines a sort order so that the smallest dots are drawn on top.
-  // function order(a, b) {
-  //   return radius(b) - radius(a);
-  // }
+    overlay.on("mouseover", mouseover)
+      .on("mouseout", mouseout)
+      .on("mousemove", mousemove)
+      .on("touchmove", mousemove);
 
-  // // After the transition finishes, you can mouseover to change the year.
-  // function enableInteraction() {
-  //   var yearScale = d3.scale.linear()
-  //       .domain([2014, 2018])
-  //       .range([box.x + 10, box.x + box.width - 10])
-  //       .clamp(true);
+    function mouseover() {
+      label.classed("active", true);
+    }
 
-  //   // Cancel the current transition, if any.
-  //   overlay.transition().duration(1000);
+    function mouseout() {
+      label.classed("active", false);
+    }
 
-  //   overlay
-  //       .on("mouseover", mouseover)
-  //       .on("mouseout", mouseout)
-  //       .on("mousemove", mousemove)
-  //       .on("touchmove", mousemove);
+    function mousemove() {
+      displayYear(yearScale.invert(d3.mouse(this)[0]));
+    }
+  }
 
-  //   function mouseover() {
-  //     label.classed("active", true);
-  //   }
+  function tweenYear() {
+    var year = d3.interpolateNumber(2014, 2018);
+    return function(t) {
+      displayYear(year(t));
+    };
+  }
 
-  //   function mouseout() {
-  //     label.classed("active", false);
-  //   }
+  // For the interpolated data, the dots and label are redrawn.
+  // Updates the display to show the specified year.
+  function displayYear(year) {
 
-  //   function mousemove() {
-  //     displayYear(yearScale.invert(d3.mouse(this)[0]));
-  //   }
-  // }
+    let filteredDat = interpolateValues(year);
+    console.log(filteredDat);
 
-  // // Tweens the entire chart by first tweening the year, and then the data.
-  // // For the interpolated data, the dots and label are redrawn.
-  // function tweenYear() {
-  //   var year = d3.interpolateNumber(2014, 2018);
-  //   return function(t) { displayYear(year(t)); };
-  // }
+    // Add dots
+    dot = svg.append('g')
+    .selectAll("dot")
+    .data(interpolateValues(year))
+    .enter()
+    .append("circle")
+      .attr("class", function(d) { return "bubbles " + d.Region })
+      .attr("cx", function (d) { return x(d.TAVG); } )
+      .attr("cx", d => x(d.TAVG))
+      .attr("cy", d => y(d.PCP))
+      .attr("r", d => z(d.PDSI_POS))
+      .style("fill", d => myColor2(d.Region))
+      .on("mouseover", function(d) {
+        tooltip.html("<strong>TAVG:</strong> " + d.TAVG + "<br><strong>Precipitation Index:</strong>"+ d.PCP);
+        tooltip.attr('class', 'd3-tip');
+        return tooltip.style("visibility", "visible");
+      })
+      .on("mousemove", function(d) {
+        tooltip.html("<strong>TAVG:</strong> " + d.TAVG + "<br><strong>Precipitation Index:</strong>"+ d.PCP);
+        return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
+      })
+      .on("mouseout", function(d) {
+        return tooltip.style("visibility", "hidden");
+      });
 
-  // // Updates the display to show the specified year.
-  // function key(d) { return d.Region; }
+    // Add a title.
+    dot.append("text")
+      .text(function(d) {
+        return d.name;
+      });
 
-  // function displayYear(year) {
-  //   dot.data(interpolateData(year), key).call(position).sort(order)
-  //   label.text(Math.round(year));
-  // }
+    console.log(dot);
+    label.text(Math.round(year));
+  }
 
-  // // Interpolates the dataset for the given (fractional) year.
-  // function interpolateData(year) {
-  //   return data.map(function(d) {
-  //     return {
-  //       name: d.Region,
-  //       temp: interpolateValues(d.TAVG, year),
-  //       drougt: interpolateValues(d.PDSI_POS, year),
-  //       percipitation: interpolateValues(d.PCP, year)
-  //     };
-  //   });
-  // }
-
-
-  // // Finds (and possibly interpolates) the value for the specified year.
-  // function interpolateValues(values, year) {
-  //   var i = year - 1,
-  //       a = values[i];
-  //   if (i > 0) {
-  //     var b = values[i - 1],
-  //         t = (year - a[0]) / (b[0] - a[0]);
-  //     return a[1] * (1 - t) + b[1] * t;
-  //   }
-  //   return a[1];
-  // }
+  // Interpolates the dataset for the given (fractional) year.
+  // Finds (and possibly interpolates) the value for the specified year.
+  function interpolateValues(year) {
+    year = parseInt(year);
+    console.log(year);
+    let filteredData = data.filter(function(row) {return row.Date == year; });
+    console.log(filteredData);
+    return filteredData;
+  }
+}
 });

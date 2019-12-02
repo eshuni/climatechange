@@ -21,7 +21,7 @@ let svgLegend = d3
   .select("#scatter-legend")
   .append("svg")
   .attr("width", width)
-  .attr("height", height)
+  .attr("height", height);
   
 // Handmade legend
 svgLegend.append("circle").attr("cx",200).attr("cy",130).attr("r", 8.0).style("fill", "#173996")
@@ -90,7 +90,7 @@ yText
   .text("AVERAGE TEMPERATURES");
 
 // Import .csv file.
-d3.csv("../static/data/final.csv").then(function(data) {
+d3.csv("static/data/final.csv").then(function(data) {
   // Visualize the data
 visualize(data);
   // console.log(data);

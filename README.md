@@ -1,4 +1,6 @@
 Data Visualization Project - Weather Trends
+
+
 Live Demo
 http://127.0.0.1:8000/Navbar.html
 

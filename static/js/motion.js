@@ -46,7 +46,7 @@ d3.csv("../static/data/final.csv").then(function(data) {
       .attr("text-anchor", "middle")
       .attr("x", 0)
       .attr("y", -20 )
-      .text("Percipitation per Region")
+      .text("Percipitation Index per Region")
       .attr("text-anchor", "start");
 
   // Add a scale for bubble size
@@ -230,12 +230,12 @@ function drawMotionChart() {
       .attr("r", d => z(d.PDSI_POS))
       .style("fill", d => myColor2(d.Region))
       .on("mouseover", function(d) {
-        tooltip.html("<strong>Average Temperature:</strong> " + d.TAVG + "<br><strong>Percipitation Index:</strong>"+ d.PCP);
+        tooltip.html("<strong>Average Temperature:</strong> " + d.TAVG + "<br><strong>Percipitation Index:</strong>"+ d.PCP + "<br><strong>Year:</strong>"+ d.Date);
         tooltip.attr('class', 'd3-tip');
         return tooltip.style("visibility", "visible");
       })
       .on("mousemove", function(d) {
-        tooltip.html("<strong>Average Temperature:</strong> " + d.TAVG + "<br><strong>Percipitation Index:</strong>"+ d.PCP);
+        tooltip.html("<strong>Average Temperature:</strong> " + d.TAVG + "<br><strong>Percipitation Index:</strong>"+ d.PCP + "<br><strong>Year:</strong>"+ d.Date);
         return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
       })
       .on("mouseout", function(d) {

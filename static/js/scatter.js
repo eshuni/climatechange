@@ -90,7 +90,7 @@ yText
   .text("AVERAGE TEMPERATURES");
 
 // Import .csv file.
-d3.csv("static/data/final.csv").then(function(data) {
+d3.csv("../static/data/final.csv").then(function(data) {
   // Visualize the data
 visualize(data);
   // console.log(data);

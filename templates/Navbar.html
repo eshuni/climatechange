@@ -9,10 +9,10 @@
     <title>Bootstrap Visualization Dashboard</title>
 
     <!-- Boostrap Stylesheet -->
-    <link rel="stylesheet" href="static/css/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" media="screen">
 
     <!-- Our own CSS stylesheet -->
-    <link rel="stylesheet" href="static/css/web.css" media="screen">
+    <link rel="stylesheet" href="../static/css/web.css" media="screen">
     <style>
       .debug {
         border-style: dashed;
@@ -60,10 +60,10 @@
               Vizualizations
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="templates/motion.html">Bubble Chart</a></li>
-              <li><a class="dropdown-item" href="templates/choropleth.html">Choropleth Map</a></li>
-              <li><a class="dropdown-item" href="templates/weathertrends.html">Scatter Plot</a></li>
-              <li><a class="dropdown-item" href="templates/chartbar.html">Bar Chart</a></li>
+              <li><a class="dropdown-item" href="motion.html">Bubble Chart</a></li>
+              <li><a class="dropdown-item" href="choropleth.html">Choropleth Map</a></li>
+              <li><a class="dropdown-item" href="weathertrends.html">Scatter Plot</a></li>
+              <li><a class="dropdown-item" href="chartbar.html">Bar Chart</a></li>
             </ul>
           </li>
         </ul>
@@ -78,7 +78,7 @@
           <article class="description-content">
             <h1 class="description-header">Summary</h1>
             <hr class="description-hr"/>
-            <img src="../INPUT/scatter.png" alt="" id="description-image"/>
+            <img src="/static/images/scatter.PNG" alt="" id="description-image"/>
             <p>This collection of tools builds on monthly values of temperature, precipitation, and several drought indices for each of the 344 climate divisions in the contiguous United States.</p>
             <p>Temperature, Precipitation, and Drought Time Series: View how a certain parameter in a certain place has changed since 1895.</p>
             <p>With recent increased discussion about Climate Change, we decided to look into one indication of Climate Change the Weather. We wanted to see this through Temperature change from 2014 to 2018.</p>
@@ -91,11 +91,10 @@
               <h2 class="imageNav-header">Visualizations</h2>
               <hr />
               <div id="images">
-                <a href="templates/motion.html"><img src="INPUT/motion.png" width = "250px" alt="Bubble Chart" class="imageNav-photo"></a>
-                
-                <a href="templates/choropleth.html"><img src="INPUT/map.png" width = "250px" alt="Choropleth Map" class="imageNav-photo"></a>
-                <a href="templates/weathertrends.html"><img src="INPUT/scatter.png" width = "250px" alt="Choropleth Map" class="imageNav-photo"></a>
-                <a href="templates/chartbar.html"><img src="INPUT/chartbar.png" width = "250px" alt="Bar Chart"class="imageNav-photo"></a>
+                <a href="/motion"><img src="static/images/motion.PNG" width = "250px" alt="Bubble Chart" class="imageNav-photo"></a>
+                <a href="/choropleth"><img src="static/images/map.PNG" width = "250px" alt="Choropleth Map" class="imageNav-photo"></a>
+                <a href="/weathertrends"><img src="static/images/scatter.PNG" width = "250px" alt="Scatter Plot" class="imageNav-photo"></a>
+                <a href="/chartbar"><img src="/static/images/chartbar.png" width = "250px" alt="Bar Chart"class="imageNav-photo"></a>
               </div>
             </div>
           </section>

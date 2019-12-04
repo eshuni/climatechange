@@ -2,7 +2,9 @@ Data Visualization Project - Weather Trends
 
 
 Live Demo
-http://127.0.0.1:8000/Navbar.html
+Flask app 
+Start the Flask app by python app.py
+Run the link http://127.0.0.1:5000/
 
 Project Description
 For this second project, your task will be to "tell a story" through data visualizations.
